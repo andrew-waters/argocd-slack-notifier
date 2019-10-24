@@ -83,11 +83,11 @@ func attachments(c config) []slack.Attachment {
 	colour := ""
 	switch c.ArgoCDEventType {
 	case "PreSync":
-		status = "Starting 💥"
+		status = "Starting Deployment 💥"
 		colour = "warning"
 		break
 	case "Sync":
-		status = "Synchronising 🤖"
+		status = "Synchronising Code 🤖"
 		colour = "warning"
 		break
 	case "PostSync":
@@ -95,7 +95,7 @@ func attachments(c config) []slack.Attachment {
 		colour = "good"
 		break
 	case "SyncFail":
-		status = "Failed 💀"
+		status = "DeploymentFailed 💀"
 		colour = "danger"
 		break
 	}
