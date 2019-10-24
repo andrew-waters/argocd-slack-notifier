@@ -23,11 +23,15 @@ type config struct {
 	SlackFooterText   string `default:"" split_words:"true"`
 }
 
-func (c config) url() string {
+func (c config) appLink() string {
 	return fmt.Sprintf("%s/applications/%s", c.ArgoCDBaseURL, c.ArgoCDApplication)
 }
 
-func (c config) rollback() string {
+func (c config) projectLink() string {
+	return fmt.Sprintf("%s/settings/projects/%s", c.ArgoCDBaseURL, c.ArgoCDProject)
+}
+
+func (c config) rollbackLink() string {
 	return fmt.Sprintf("%s/applications/%s?rollback=0", c.ArgoCDBaseURL, c.ArgoCDApplication)
 }
 
@@ -75,29 +79,23 @@ func attachments(c config) []slack.Attachment {
 		Timestamp: &ts,
 	}
 
-	a.AddField(slack.Field{
-		Title: "Application",
-		Value: fmt.Sprintf("<%s|%s/%s>", c.url(), c.ArgoCDProject, c.ArgoCDApplication),
-		Short: true,
-	})
-
 	status := ""
 	colour := ""
 	switch c.ArgoCDEventType {
 	case "PreSync":
-		status = "💥 Starting"
+		status = "Starting 💥"
 		colour = "warning"
 		break
 	case "Sync":
-		status = "🤖 Synchronising"
+		status = "Synchronising 🤖"
 		colour = "warning"
 		break
 	case "PostSync":
-		status = "🚀 Completed"
+		status = "Deployment Completed 🚀"
 		colour = "good"
 		break
 	case "SyncFail":
-		status = "💀 Failed"
+		status = "Failed 💀"
 		colour = "danger"
 		break
 	}
@@ -105,8 +103,20 @@ func attachments(c config) []slack.Attachment {
 	a.Color = &colour
 
 	a.AddField(slack.Field{
-		Title: "Status",
+		Title: "",
 		Value: status,
+		Short: false,
+	})
+
+	a.AddField(slack.Field{
+		Title: "Project",
+		Value: fmt.Sprintf("<%s|%s>", c.projectLink(), c.ArgoCDProject),
+		Short: true,
+	})
+
+	a.AddField(slack.Field{
+		Title: "Application",
+		Value: fmt.Sprintf("<%s|%s>", c.appLink(), c.ArgoCDApplication),
 		Short: true,
 	})
 
@@ -114,7 +124,7 @@ func attachments(c config) []slack.Attachment {
 		a.AddAction(slack.Action{
 			Type:  "button",
 			Text:  "Initiate Rollback",
-			Url:   c.rollback(),
+			Url:   c.rollbackLink(),
 			Style: "danger",
 		})
 	}
