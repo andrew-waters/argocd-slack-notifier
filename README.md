@@ -1,12 +1,14 @@
 # ArgoCD Slack Notifier
 
-Users of [ArgoCD](https://github.com/argoproj/argo-cd/) may wish to have autoamted slack messages sent when events occur within the CD pipeline. There is no built in mechanism in ArgoCD to do this - which would be out of scope - but there are _hooks_ which can be leveraged to ahve the same effect.
+Users of [ArgoCD](https://github.com/argoproj/argo-cd/) may wish to have automated slack messages sent when events occur within the CD pipeline. There is no built in mechanism in ArgoCD to do this - which would be out of scope - but there are _hooks_ which can be leveraged to have the same effect.
 
-This repository builds a public docker image which can be used to send Argo-centric messages to a designated slack channel informing users of events that occur within the pipeline.
+This repository builds a public docker image which can be used to send ArgoCD centric messages to a designated slack channel informing users of events that occur within the pipeline.
 
 Argo supports four hook events: `PreSync`, `Sync`, `PostSync` and `SyncFail`. You can read more about the [circumstances under which they are triggered here](https://argoproj.github.io/argo-cd/user-guide/resource_hooks).
 
 ## Running
+
+### Docker
 
 The docker image is available at `andondev/argocd-slack-notifier`:
 
@@ -29,7 +31,9 @@ docker run andondev/argocd-slack-notifier \
   [...]
 ```
 
-The quickest way to test manually is to clone this repository then run:
+### Locally (Go code)
+
+The quickest way to test manually is to clone this repository then run the following:
 
 ```bash
 cp .env.example .env
