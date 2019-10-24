@@ -19,6 +19,6 @@ jobs:
     - name: Login (GH)
       run: docker login docker.pkg.github.com -u andrew-waters -p ${{ secrets.GITHUB_TOKEN }}
     - name: Push (DH)
-      run: docker push andrewwaters/argocd-slack-notifier/argocd-slack-notifier:latest
+      run: docker push argocd-slack-notifier:latest
     - name: Push (GH)
       run: docker push docker.pkg.github.com/andrew-waters/argocd-slack-notifier/argocd-slack-notifier:latest
