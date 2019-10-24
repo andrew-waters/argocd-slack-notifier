@@ -13,7 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build
-      run: docker build . --file Dockerfile --tag docker.pkg.github.com/andrew-waters/argocd-slack-notifier/argocd-slack-notifier:latest
+      run: docker build . --file Dockerfile --tag argocd-slack-notifier:latest
+    - name: Tag (DH)
+      run: docker tag argocd-slack-notifier:latest andrewwaters/argocd-slack-notifier:latest
+    - name: Tag (GH)
+      run: docker tag argocd-slack-notifier:latest docker.pkg.github.com/andrew-waters/argocd-slack-notifier/argocd-slack-notifier:latest
     - name: Login (DH)
       run: docker login -u andrewwaters -p ${{ secrets.DOCKER_HUB_TOKEN }}
     - name: Login (GH)
