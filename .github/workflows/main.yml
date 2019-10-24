@@ -15,14 +15,14 @@ jobs:
     - name: Build
       run: docker build . --file Dockerfile --tag argocd-slack-notifier:latest
     - name: Tag (DH)
-      run: docker tag argocd-slack-notifier:latest andrewwaters/argocd-slack-notifier:latest
+      run: docker tag argocd-slack-notifier:latest andondev/argocd-slack-notifier:latest
     - name: Tag (GH)
       run: docker tag argocd-slack-notifier:latest docker.pkg.github.com/andrew-waters/argocd-slack-notifier/argocd-slack-notifier:latest
     - name: Login (DH)
-      run: docker login -u andrewwaters -p ${{ secrets.DOCKER_HUB_TOKEN }}
+      run: docker login -u andondev -p ${{ secrets.DOCKER_HUB_TOKEN }}
     - name: Login (GH)
       run: docker login docker.pkg.github.com -u andrew-waters -p ${{ secrets.GITHUB_TOKEN }}
     - name: Push (DH)
-      run: docker push argocd-slack-notifier:latest
+      run: docker push andondev/argocd-slack-notifier:latest
     - name: Push (GH)
       run: docker push docker.pkg.github.com/andrew-waters/argocd-slack-notifier/argocd-slack-notifier:latest
