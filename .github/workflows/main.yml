@@ -6,11 +6,13 @@ on:
       - master
 
 jobs:
-  build:
+  release:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
-    - name: Build the Docker image
+    - name: Build
       run: docker build . --file Dockerfile --tag argocd-slack-notifier:latest
+    - name: Push
+      run: docker push docker.pkg.github.com/andrew-waters/argocd-slack-notifier/argocd-slack-notifier:latest
