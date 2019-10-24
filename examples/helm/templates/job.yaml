@@ -1,0 +1,50 @@
+{{- if .Values.enabled }}
+{{- range $project := $.Values.projects }}
+{{- range $app := $project.apps }}
+{{- range $hook := $app.hooks }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: slack-notifier-
+  namespace: {{ $.Values.argocd.namespace }}
+  annotations:
+    argocd.argoproj.io/hook: {{ $hook }}
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      containers:
+      - name: slack-status-post
+        image: andondev/argocd-slack-notifier
+        imagePullPolicy: Always
+        env:
+          - name: NOTIFIER_ARGO_CD_EVENT_TYPE
+            value: {{ $hook }}
+          - name: NOTIFIER_ARGO_CD_BASE_URL
+            value: {{ $.Values.argocd.url }}
+          - name: NOTIFIER_ARGO_CD_PROJECT
+            value: {{ $project.name }}
+          - name: NOTIFIER_ARGO_CD_APPLICATION
+            value: {{ $app.name }}
+          - name: NOTIFIER_SLACK_CHANNEL
+            value: {{ $.Values.slack.channel }}
+          - name: NOTIFIER_SLACK_USERNAME
+            value: {{ $.Values.slack.username }}
+          - name: NOTIFIER_SLACK_ICON_EMOJI
+            value: {{ $.Values.slack.icon }}
+          - name: NOTIFIER_SLACK_TEXT
+            value: {{ $.Values.slack.text }}
+          - name: NOTIFIER_SLACK_FOOTER_TEXT
+            value: {{ $.Values.slack.footer }}
+          - name: NOTIFIER_SLACK_URL
+            valueFrom:
+              secretKeyRef:
+                name: argo-hook-secrets
+                key: slackWebhookUrl
+      restartPolicy: Never
+  backoffLimit: 4
+---
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

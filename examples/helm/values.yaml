@@ -1,0 +1,26 @@
+enabled: true
+argocd:
+  namespace: argocd
+  url: https://your-argo-server.com
+slack:
+  url: https://hooks.slack.com/services/...
+  channel: general
+  username: Notifier
+  icon: ''
+  text: ''
+  footer: ''
+projects:
+  - name: project-one-name
+    apps:
+      - name: application-one-name
+        hooks:
+          - PreSync
+          - PostSync
+          - Sync
+          - SyncFail
+  - name: project-two-name
+    apps:
+      - name: application-two-name
+        hooks:
+          - PostSync
+          - SyncFail
